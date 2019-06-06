@@ -12,16 +12,16 @@ export interface FactorioAutoscalingGroupProps {
 export class FactorioAutoScalingGroup extends autoscaling.AutoScalingGroup {
   constructor(parent: cdk.Construct, name: string, props: FactorioAutoscalingGroupProps) {
     super(parent, name, {
-       // TODO: instance type from param
-       instanceType: new ec2.InstanceType('m3.medium'),
-       machineImage: new ecs.EcsOptimizedAmi(),
-       updateType: autoscaling.UpdateType.ReplacingUpdate,
-       // TODO: capacity from params, make shutting down the server possible
-       minCapacity: 1,
-       maxCapacity: 1,
-       desiredCapacity: 1,
-       vpc: props.vpc,
-       // TODO: spot price from param
+      // TODO: instance type from param
+      instanceType: new ec2.InstanceType('m3.medium'),
+      machineImage: new ecs.EcsOptimizedAmi(),
+      updateType: autoscaling.UpdateType.ReplacingUpdate,
+      // TODO: capacity from params, make shutting down the server possible
+      minCapacity: 1,
+      maxCapacity: 1,
+      desiredCapacity: 1,
+      vpc: props.vpc,
+      // TODO: spot price from param
       spotPrice: '0.05',
       associatePublicIpAddress: true,
       vpcSubnets: { subnetType: ec2.SubnetType.Public },

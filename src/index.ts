@@ -32,12 +32,12 @@ class FactorioECSCluster extends cdk.Stack {
     })
     container.addPortMappings(
       // Game port
-      {containerPort: 34197, hostPort: 34197, protocol: ecs.Protocol.Udp},
+      { containerPort: 34197, hostPort: 34197, protocol: ecs.Protocol.Udp },
       // Rcon port
-      {containerPort: 27015, hostPort: 27015, protocol: ecs.Protocol.Tcp}
+      { containerPort: 27015, hostPort: 27015, protocol: ecs.Protocol.Tcp }
     )
     container.addMountPoints(
-      {containerPath: '/factorio', sourceVolume: VOLUME_NAME, readOnly: false}
+      { containerPath: '/factorio', sourceVolume: VOLUME_NAME, readOnly: false }
     )
 
     new ecs.Ec2Service(this, 'FactorioService', {
