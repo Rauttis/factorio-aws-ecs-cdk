@@ -6,14 +6,14 @@ The stack creates:
 - EFS for storing saves
 - EC2 autoscaling group that allows you to terminate and spin up new EC2 instances with EFS mount for the ECS cluster
 - ECS cluster
-- ECS Task definition
-- ECS Service
+- ECS task definition
+- ECS service
 
 ## Configuration
 
 Configuration is currently hard-coded and can be edited in the source.
 
-TODO: In the future it should be possible to configure 
+TODO: In the future it should be possible to configure via cdk.json or cloudformation parameters (TBD)
 - EC2 instance on/off state (autoscaling group capacity)
 - EC2 instance type
 - spot pricing
