@@ -27,6 +27,12 @@ $ npm i
 $ npm run deploy
 ```
 
+## Connecting to the server
+
+You can use the public DNS or IP found in the EC2 control panel. Port can be omitted as it is the default port used by Factorio (34197)
+
+TODO: Make it possible for the stack to create a route53 record that points to the public ip.
+
 ## Modifying server configs / saves
 
 Currently the only way to do this is to SSH to the EC2 instance. The saves and configs are located in `/opt/factorio`
