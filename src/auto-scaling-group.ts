@@ -16,6 +16,7 @@ export class FactorioAutoScalingGroup extends autoscaling.AutoScalingGroup {
        instanceType: new ec2.InstanceType('m3.medium'),
        machineImage: new ecs.EcsOptimizedAmi(),
        updateType: autoscaling.UpdateType.ReplacingUpdate,
+       // TODO: capacity from params, make shutting down the server possible
        minCapacity: 1,
        maxCapacity: 1,
        desiredCapacity: 1,
