@@ -14,11 +14,15 @@ The stack creates:
 Configuration is currently hard-coded and can be edited in the source.
 
 TODO: In the future it should be possible to configure via cdk.json or cloudformation parameters (TBD)
+
+Can already be configured in source:
 - EC2 instance on/off state (autoscaling group capacity)
 - EC2 instance type
 - spot pricing
 - SSH key name
 - Factorio image version
+
+TODO:
 - Route53 hosted zone and subdomain
 
 ## Deployment
