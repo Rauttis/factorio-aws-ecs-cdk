@@ -19,6 +19,7 @@ TODO: In the future it should be possible to configure via cdk.json or cloudform
 - spot pricing
 - SSH key name
 - Factorio image version
+- Route53 hosted zone and subdomain
 
 ## Deployment
 
