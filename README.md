@@ -1,6 +1,6 @@
 # factorio-aws-ecs-cdk
 
-AWS CDK projects that deploys the infrastructure needed to run Factorio in ECS.
+AWS CDK project that deploys the infrastructure needed to run Factorio in ECS.
 
 The stack creates:
 - EFS for storing saves
@@ -26,4 +26,3 @@ TODO: In the future it should be possible to configure
 $ npm i
 $ npm run deploy
 ```
-
