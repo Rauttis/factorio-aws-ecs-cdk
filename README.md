@@ -26,3 +26,11 @@ TODO: In the future it should be possible to configure
 $ npm i
 $ npm run deploy
 ```
+
+## Modifying server configs / saves
+
+Currently the only way to do this is to SSH to the EC2 instance. The saves and configs are located in `/opt/factorio`
+
+## Updating Factorio
+
+Update the image tag or if a rolling tag is used (latest, stable) you can force a new deployment in ECS to start an instance with the new image. If existing configs or saves stored in EFS are incompatible, they have to be replaced in the EFS volume. One way to do this is to simply remove them. They will be re-created once a new Factorio ECS instance boots.
