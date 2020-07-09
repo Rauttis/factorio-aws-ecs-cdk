@@ -4,7 +4,6 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "cdk": "cdk",
     "start": "ts-node src/index.ts",
     "synth": "cdk synth",
     "deploy": "cdk deploy",
@@ -14,14 +13,14 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
-    "@aws-cdk/aws-autoscaling": "^0.33.0",
-    "@aws-cdk/aws-ec2": "^0.33.0",
-    "@aws-cdk/aws-ecs": "^0.33.0",
-    "@aws-cdk/aws-efs": "^0.33.0",
-    "@aws-cdk/cdk": "^0.33.0",
-    "@types/node": "^12.0.4",
-    "aws-cdk": "^0.33.0",
-    "ts-node": "^8.2.0",
-    "typescript": "^3.5.1"
+    "@aws-cdk/aws-autoscaling": "^1.51.0",
+    "@aws-cdk/aws-ec2": "^1.51.0",
+    "@aws-cdk/aws-ecs": "^1.51.0",
+    "@aws-cdk/aws-efs": "^1.51.0",
+    "@aws-cdk/core": "^1.51.0",
+    "@types/node": "^12.12.48",
+    "aws-cdk": "^1.51.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.6"
   }
 }
