@@ -1,52 +1,64 @@
 import * as ec2 from '@aws-cdk/aws-ec2'
 import * as ecs from '@aws-cdk/aws-ecs'
-import * as cdk from '@aws-cdk/cdk'
-import { FactorioFileSystem } from './file-system'
-import { FactorioAutoScalingGroup } from './auto-scaling-group'
+import * as cdk from '@aws-cdk/core'
+import * as efs from '@aws-cdk/aws-efs'
 
 class FactorioECSCluster extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props)
 
-    const vpc = new ec2.Vpc(this, 'FactorioVpc', { maxAZs: 2 })
+    const vpc = new ec2.Vpc(this, 'Vpc', { maxAzs: 1, natGateways: 0 })
 
-    const fileSystem = new FactorioFileSystem(this, 'FactorioFileSystem', { vpc })
-    const autoscalingGroup = new FactorioAutoScalingGroup(this, 'FactorioAutoScalingGroup', { vpc, fileSystem })
+    const fileSystem = new efs.FileSystem(this, 'FileSystem', { vpc, removalPolicy: cdk.RemovalPolicy.DESTROY })
 
-    const cluster = new ecs.Cluster(this, 'FactorioEcsCluster', { vpc })
-    cluster.addAutoScalingGroup(autoscalingGroup)
+    const cluster = new ecs.Cluster(this, 'EcsCluster', { vpc })
 
-    const taskDefinition = new ecs.Ec2TaskDefinition(this, 'FactorioTaskDefinition')
-    const VOLUME_NAME = 'FactorioVolume'
-    taskDefinition.addVolume({
-      name: VOLUME_NAME,
-      host: {
-        sourcePath: '/opt/factorio'
-      }
-    })
+    const taskDefinition = new ecs.FargateTaskDefinition(this, 'TaskDefinition', { cpu: 256, memoryLimitMiB: 1024 })
 
-    const container = taskDefinition.addContainer('FactorioContainer', {
-      // TODO: Get image from param
+    const VOLUME_NAME = 'FactorioEfsVolume'
+
+    // // The CDK construct does not support EFS mounts yet, so we need to override it
+    const cfnTaskDef = taskDefinition.node.defaultChild as ecs.CfnTaskDefinition
+    cfnTaskDef.addPropertyOverride('Volumes', [
+      {
+        EFSVolumeConfiguration: {
+          FilesystemId: fileSystem.fileSystemId,
+        },
+        Name: VOLUME_NAME,
+      },
+    ])
+
+    const container = taskDefinition.addContainer('Container', {
       image: ecs.ContainerImage.fromRegistry('factoriotools/factorio:stable'),
-      memoryReservationMiB: 1024
+      memoryReservationMiB: 1024,
+      logging: ecs.LogDrivers.awsLogs({ streamPrefix: 'Factorio' }),
     })
     container.addPortMappings(
       // Game port
-      { containerPort: 34197, hostPort: 34197, protocol: ecs.Protocol.Udp },
+      { containerPort: 34197, hostPort: 34197, protocol: ecs.Protocol.UDP },
       // Rcon port
-      { containerPort: 27015, hostPort: 27015, protocol: ecs.Protocol.Tcp }
+      { containerPort: 27015, hostPort: 27015, protocol: ecs.Protocol.TCP }
     )
-    container.addMountPoints(
-      { containerPath: '/factorio', sourceVolume: VOLUME_NAME, readOnly: false }
-    )
+    container.addMountPoints({
+      containerPath: '/factorio',
+      sourceVolume: VOLUME_NAME,
+      readOnly: false,
+    })
 
-    new ecs.Ec2Service(this, 'FactorioService', {
+    const service = new ecs.FargateService(this, 'Service', {
       cluster,
       taskDefinition,
       desiredCount: 1,
-      maximumPercent: 100,
-      minimumHealthyPercent: 0
+      maxHealthyPercent: 100,
+      minHealthyPercent: 0,
+      assignPublicIp: true,
+      // LATEST would be preferable, but it is currently at 1.3 which does not support EFS mounts
+      platformVersion: ecs.FargatePlatformVersion.VERSION1_4,
     })
+
+    service.connections.allowFromAnyIpv4(ec2.Port.udp(34197))
+    service.connections.allowFromAnyIpv4(ec2.Port.tcp(27015))
+    fileSystem.connections.allowFrom(service, ec2.Port.tcp(2049))
   }
 }
 
@@ -54,4 +66,4 @@ const app = new cdk.App()
 
 new FactorioECSCluster(app, 'Factorio')
 
-app.run()
+app.synth()
