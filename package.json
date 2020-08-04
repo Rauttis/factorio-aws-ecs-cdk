@@ -13,7 +13,6 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
-    "@aws-cdk/aws-autoscaling": "^1.56.0",
     "@aws-cdk/aws-ec2": "^1.56.0",
     "@aws-cdk/aws-ecs": "^1.56.0",
     "@aws-cdk/aws-efs": "^1.56.0",
