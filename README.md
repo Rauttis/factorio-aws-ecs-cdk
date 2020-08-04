@@ -27,3 +27,7 @@ You can use the public IP found in the ECS task details.
 ## Updating Factorio
 
 Update the image tag or if a rolling tag is used (latest, stable) you can force a new deployment in ECS to start an instance with the new image. If existing configs or saves stored in EFS are incompatible, they have to be replaced in the EFS volume. One way to do this is to simply remove them. They will be re-created once a new Factorio ECS instance boots.
+
+## Deleting the server
+
+Delete the Factorio stack from the Cloudformation dashboard or run `npm run destroy`. Note that this destroys everything, including the EFS volume that contains your saves.

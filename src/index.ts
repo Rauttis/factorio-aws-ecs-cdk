@@ -17,7 +17,7 @@ class FactorioStack extends cdk.Stack {
 
     const VOLUME_NAME = 'FactorioEfsVolume'
 
-    // // The CDK construct does not support EFS mounts yet, so we need to override it
+    // The CDK construct does not support EFS mounts yet, so we need to override it
     const cfnTaskDef = taskDefinition.node.defaultChild as ecs.CfnTaskDefinition
     cfnTaskDef.addPropertyOverride('Volumes', [
       {
