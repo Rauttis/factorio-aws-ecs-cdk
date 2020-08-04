@@ -11,7 +11,13 @@ The stack creates:
 
 ## Configuration
 
-Configuration is currently hard-coded and can be edited in the source.
+Configuration is done via environment variables. .env files are also supported (see `.env-example`).
+
+| Variable  | Description | Default |
+| --------- | ------------| ------- |
+| CPU       | The amount of cpu to assign for the server <br> The supported CPU/Memory combinations can be found [here](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html) | 256 |
+| MEMORY    | The amount of memory to assign for the server <br> The supported CPU/Memory combinations can be found [here](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html) | 1024 |
+| IMAGE_TAG | The version tag of the factorio docker image you want to use <br> Supported tags can be found [here](https://hub.docker.com/r/factoriotools/factorio/) | stable |
 
 ## Deployment
 

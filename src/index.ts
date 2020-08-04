@@ -3,9 +3,11 @@ import * as ecs from '@aws-cdk/aws-ecs'
 import * as cdk from '@aws-cdk/core'
 import * as efs from '@aws-cdk/aws-efs'
 
+import config, { IFactorioStackConfig } from './config'
+
 class FactorioStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
-    super(scope, id, props)
+  constructor(scope: cdk.App, id: string, props: IFactorioStackConfig) {
+    super(scope, id)
 
     const vpc = new ec2.Vpc(this, 'Vpc', { maxAzs: 1, natGateways: 0 })
 
@@ -13,7 +15,10 @@ class FactorioStack extends cdk.Stack {
 
     const cluster = new ecs.Cluster(this, 'EcsCluster', { vpc })
 
-    const taskDefinition = new ecs.FargateTaskDefinition(this, 'TaskDefinition', { cpu: 256, memoryLimitMiB: 1024 })
+    const taskDefinition = new ecs.FargateTaskDefinition(this, 'TaskDefinition', {
+      cpu: props.cpu,
+      memoryLimitMiB: props.memory,
+    })
 
     const VOLUME_NAME = 'FactorioEfsVolume'
 
@@ -29,8 +34,8 @@ class FactorioStack extends cdk.Stack {
     ])
 
     const container = taskDefinition.addContainer('Container', {
-      image: ecs.ContainerImage.fromRegistry('factoriotools/factorio:stable'),
-      memoryReservationMiB: 1024,
+      image: ecs.ContainerImage.fromRegistry(`factoriotools/factorio:${props.imageTag}`),
+      memoryReservationMiB: props.memory,
       logging: ecs.LogDrivers.awsLogs({ streamPrefix: 'Factorio' }),
     })
     container.addPortMappings(
@@ -64,6 +69,6 @@ class FactorioStack extends cdk.Stack {
 
 const app = new cdk.App()
 
-new FactorioStack(app, 'Factorio')
+new FactorioStack(app, 'Factorio', config)
 
 app.synth()
