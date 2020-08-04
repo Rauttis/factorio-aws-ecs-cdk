@@ -3,7 +3,7 @@ import * as ecs from '@aws-cdk/aws-ecs'
 import * as cdk from '@aws-cdk/core'
 import * as efs from '@aws-cdk/aws-efs'
 
-class FactorioECSCluster extends cdk.Stack {
+class FactorioStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props)
 
@@ -64,6 +64,6 @@ class FactorioECSCluster extends cdk.Stack {
 
 const app = new cdk.App()
 
-new FactorioECSCluster(app, 'Factorio')
+new FactorioStack(app, 'Factorio')
 
 app.synth()
